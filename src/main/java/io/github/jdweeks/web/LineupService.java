@@ -24,25 +24,15 @@ public class LineupService {
     @RestClient
     YClient yClient;
 
-    public LineupResponse getLineup() {
+    public LineupResponse optimizeLineup(Lineup lineup) {
         List<Player> players = yClient.getPlayers().getPlayers().getResult();
         LineupSolution problem = new LineupSolution();
-        Lineup lineup = new Lineup();
-
-        lineup.setSalaryCap(200);
         problem.setLineup(lineup);
 
-        String[] moved = {};
-        String[] out = {};
-	String day = "Sun";
-
         players = players.stream()
-                .filter(p -> p.getGameStartTime().startsWith(day))
-                .filter(p -> p.getFppg() > 1)
-                .filter(p -> !Arrays.asList(moved).contains(p.getTeam()))
-                .filter(p -> !Arrays.asList(out).contains(p.getName()))
+                .filter(p -> p.getGameStartTime().startsWith(lineup.getDay()))
+                .filter(p -> !lineup.getRejectList().contains(p.getName()))
                 .collect(Collectors.toList());
-
         problem.setPlayers(players);
 
         return buildResponse(lineupSolver.solve(problem));

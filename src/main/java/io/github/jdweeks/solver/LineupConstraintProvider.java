@@ -39,7 +39,6 @@ public class LineupConstraintProvider implements ConstraintProvider {
                     switch(p) {
                         case "QB":
                         case "TE":
-                        case "DEF":
                             return c > 1;
                         case "RB":
                         case "WR":
