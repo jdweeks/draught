@@ -29,7 +29,7 @@ jobs:
           gu install native-image
 
   build-native:
-    needs: setup
+    needs: setup-graal
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
       - run: ./mvnw package -Pnative -Dquarkus.native.container-build=true
 
   publish-image:
-    needs: build
+    needs: build-native
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -69,6 +69,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy-k8s:
+    needs: publish-image
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
