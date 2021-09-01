@@ -10,25 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  setup-graal:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Graalvm
-        id: setup-graalvm
-        uses: DeLaGuardo/setup-graalvm@master
-        with:
-          # GraalVM version, no pattern syntax available atm
-          graalvm: '21.0.0.2'
-          # Java version, optional, defaults to 'java8'. Available options are 'java8' and 'java11'.
-          java: 'java11'
-          # Architecture flag, optional, defaults to 'amd64'. Available options are 'amd64' and 'aarch64'. Later is available only for linux runners.
-          arch: 'amd64'
-
-      - name: Install native-image component
-        run: |
-          gu install native-image
-
-  build-publish:
+  build-and-publish:
     needs: setup-graal
     runs-on: ubuntu-latest
     steps:
@@ -60,14 +42,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy-k8s:
-    needs: build-publish
+    needs: build-and-publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
 
       - name: Helm install
-        # Parameters are pulled directly from the GitHub deployment event so the
-        # configuration for the job here is very minimal.
         uses: deliverybot/helm@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
