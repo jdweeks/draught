@@ -50,6 +50,7 @@ jobs:
         uses: deliverybot/helm@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          helm: helm3
           release: draught
           namespace: jdweeks
           chart: app
