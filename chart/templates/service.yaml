@@ -4,6 +4,8 @@ metadata:
   name: {{ include "chart.fullname" . }}
   labels:
     {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    dev.okteto.com/auto-ingress: {{ .Values.service.auto-ingress }}
 spec:
   type: {{ .Values.service.type }}
   ports:
