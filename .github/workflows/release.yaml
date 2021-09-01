@@ -52,8 +52,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           helm: helm3
           release: draught
-          version: 1.0.0
-          namespace: jdweeks
-          chart: app
+          chart: chart
         env:
           KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
