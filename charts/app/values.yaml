@@ -4,3 +4,23 @@ image:
   repository: ghcr.io/jdweeks/draught
   pullPolicy: Always
   tag: main
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+autoscaling:
+  enabled: false
+
+resources: {}
