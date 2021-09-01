@@ -3,3 +3,4 @@ replicaCount: 1
 image:
   repository: ghcr.io/jdweeks/draught
   pullPolicy: Always
+  tag: main
