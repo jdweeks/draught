@@ -17,7 +17,7 @@ podSecurityContext: {}
 securityContext: {}
 
 service:
-  auto-ingress: true
+  autoIngress: true
   type: ClusterIP
   port: 80
 
