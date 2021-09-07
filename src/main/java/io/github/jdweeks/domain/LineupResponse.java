@@ -1,6 +1,5 @@
-package io.github.jdweeks.web;
+package io.github.jdweeks.domain;
 
-import io.github.jdweeks.domain.Player;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

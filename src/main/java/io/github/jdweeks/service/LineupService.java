@@ -1,21 +1,24 @@
-package io.github.jdweeks.web;
+package io.github.jdweeks.service;
 
 import io.github.jdweeks.client.YClient;
 import io.github.jdweeks.domain.Lineup;
+import io.github.jdweeks.domain.LineupResponse;
 import io.github.jdweeks.domain.LineupSolution;
 import io.github.jdweeks.domain.Player;
+import io.github.jdweeks.message.LineupProducer;
 import io.github.jdweeks.solver.LineupSolver;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class LineupService {
+
+    @Inject
+    LineupProducer lineupProducer;
 
     @Inject
     LineupSolver lineupSolver;
@@ -24,7 +27,7 @@ public class LineupService {
     @RestClient
     YClient yClient;
 
-    public LineupResponse optimizeLineup(Lineup lineup) {
+    public void optimizeLineup(Lineup lineup) {
         List<Player> players = yClient.getPlayers().getPlayers().getResult();
         LineupSolution problem = new LineupSolution();
         problem.setLineup(lineup);
@@ -35,7 +38,7 @@ public class LineupService {
                 .collect(Collectors.toList());
         problem.setPlayers(players);
 
-        return buildResponse(lineupSolver.solve(problem));
+        sendResponse(buildResponse(lineupSolver.solve(problem)));
     }
 
     private LineupResponse buildResponse(LineupSolution solution) {
@@ -47,5 +50,9 @@ public class LineupService {
         response.setTotalSalary(response.getPlayers().stream().mapToInt(Player::getSalary).sum());
 
         return response;
+    }
+
+    private void sendResponse(LineupResponse response) {
+        lineupProducer.produce(response);
     }
 }
