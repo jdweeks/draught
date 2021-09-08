@@ -25,7 +25,7 @@ app:
   kafka:
     bootstrap: kafka-0.kafka-headless.kafka-jdweeks.svc.cluster.local:9092
   optaplanner:
-    limit: 1m
+    limit: 60m
 
 autoscaling:
   enabled: false
