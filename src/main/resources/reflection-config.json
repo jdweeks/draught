@@ -27,6 +27,15 @@
     "allPublicFields" : true
   },
   {
+    "name" : "io.github.jdweeks.domain.LineupResponse",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
+  },
+  {
     "name" : "io.github.jdweeks.domain.LineupSolution",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,

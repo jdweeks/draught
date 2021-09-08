@@ -1,4 +1,4 @@
-package io.github.jdweeks.message;
+package io.github.jdweeks.kafka;
 
 import io.github.jdweeks.domain.Lineup;
 import io.github.jdweeks.service.LineupService;

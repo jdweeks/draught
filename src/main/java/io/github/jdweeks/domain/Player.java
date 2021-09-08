@@ -11,11 +11,9 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @PlanningEntity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Player {
-
     private String name;
     private String position;
     private String team;
@@ -25,5 +23,4 @@ public class Player {
 
     @PlanningVariable(valueRangeProviderRefs = "selected")
     private Boolean selected;
-
 }

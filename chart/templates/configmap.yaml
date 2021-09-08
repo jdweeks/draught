@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: draught-config
+data:
+  application.properties: |-
+    quarkus.optaplanner.solver.termination.spent-limit={{ .Values.app.optaplanner.limit }}
+    kafka.bootstrap.servers={{ .Values.app.kafka.bootstrap }}

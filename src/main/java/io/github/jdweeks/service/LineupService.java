@@ -5,7 +5,7 @@ import io.github.jdweeks.domain.Lineup;
 import io.github.jdweeks.domain.LineupResponse;
 import io.github.jdweeks.domain.LineupSolution;
 import io.github.jdweeks.domain.Player;
-import io.github.jdweeks.message.LineupProducer;
+import io.github.jdweeks.kafka.LineupProducer;
 import io.github.jdweeks.solver.LineupSolver;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
