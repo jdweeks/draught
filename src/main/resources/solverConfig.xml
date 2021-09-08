@@ -10,4 +10,5 @@
             </pillarSwapMoveSelector>
         </unionMoveSelector>
     </localSearch>
+    <environmentMode>NON_REPRODUCIBLE</environmentMode>
 </solver>
