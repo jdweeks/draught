@@ -55,6 +55,7 @@ jobs:
           namespace: jdweeks
           secrets: ${{ toJSON(secrets) }}
           chart: chart
+          atomic: false
         env:
           KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
           MONGODB_USER: ${{ secrets.MONGODB_USER }}
