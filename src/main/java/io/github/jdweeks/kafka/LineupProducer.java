@@ -8,7 +8,7 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import java.util.concurrent.CompletionStage;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class LineupProducer {
     Emitter<String> emitter;
 
     @SneakyThrows
-    public void produce(final LineupResponse response) {
-        emitter.send(mapper.writeValueAsString(response));
+    public CompletionStage<Void> produce(final LineupResponse response) {
+        return emitter.send(mapper.writeValueAsString(response));
     }
 }

@@ -1,6 +1,7 @@
 package io.github.jdweeks.solver;
 
 import io.github.jdweeks.domain.LineupSolution;
+import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
@@ -15,7 +16,7 @@ public class LineupSolver {
 
     final SolverManager<LineupSolution, UUID> solverManager;
 
-    public LineupSolution solve(final LineupSolution problem) {
+    public Uni<LineupSolution> solve(final LineupSolution problem) {
         SolverJob<LineupSolution, UUID> solverJob = solverManager.solve(UUID.randomUUID(), problem);
 
         LineupSolution solution;
@@ -23,9 +24,9 @@ public class LineupSolver {
             // Wait until the solving ends
             solution = solverJob.getFinalBestSolution();
         } catch (InterruptedException | ExecutionException e) {
-            throw new IllegalStateException("Solving failed.", e);
+            return Uni.createFrom().failure(new IllegalStateException("Solving failed.", e));
         }
 
-        return solution;
+        return Uni.createFrom().item(solution);
     }
 }
