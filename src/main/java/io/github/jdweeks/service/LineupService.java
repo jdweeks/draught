@@ -28,17 +28,20 @@ public class LineupService {
     YClient yClient;
 
     public void optimizeLineup(Lineup lineup) {
-        List<Player> players = yClient.getPlayers().getPlayers().getResult();
         LineupSolution problem = new LineupSolution();
         problem.setLineup(lineup);
 
+        List<Player> players = yClient.getPlayers().getPlayers().getResult();
         players = players.stream()
                 .filter(p -> p.getGameStartTime().startsWith(lineup.getDay()))
                 .filter(p -> !lineup.getRejectList().contains(p.getName()))
                 .collect(Collectors.toList());
-        problem.setPlayers(players);
 
-        sendResponse(buildResponse(lineupSolver.solve(problem)));
+        problem.setPlayers(players);
+        LineupSolution solution = lineupSolver.solve(problem);
+
+        LineupResponse response = buildResponse(solution);
+        sendResponse(response);
     }
 
     private LineupResponse buildResponse(LineupSolution solution) {

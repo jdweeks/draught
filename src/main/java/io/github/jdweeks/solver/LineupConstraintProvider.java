@@ -3,7 +3,10 @@ package io.github.jdweeks.solver;
 import io.github.jdweeks.domain.Lineup;
 import io.github.jdweeks.domain.Player;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
-import org.optaplanner.core.api.score.stream.*;
+import org.optaplanner.core.api.score.stream.Constraint;
+import org.optaplanner.core.api.score.stream.ConstraintCollectors;
+import org.optaplanner.core.api.score.stream.ConstraintFactory;
+import org.optaplanner.core.api.score.stream.ConstraintProvider;
 
 public class LineupConstraintProvider implements ConstraintProvider {
 
@@ -12,6 +15,7 @@ public class LineupConstraintProvider implements ConstraintProvider {
         return new Constraint[] {
             salaryCap(constraintFactory),
             maxPoints(constraintFactory),
+            acceptList(constraintFactory),
             rosterFormat(constraintFactory)
         };
     }
@@ -31,6 +35,14 @@ public class LineupConstraintProvider implements ConstraintProvider {
                 .penalize("Salary Cap", HardSoftScore.ONE_HARD, (s, l) -> s - l.getSalaryCap());
     }
 
+    private Constraint acceptList(ConstraintFactory constraintFactory) {
+        return constraintFactory.from(Player.class)
+                .filter(Player::getSelected)
+                .join(Lineup.class)
+                .filter((p, l) -> l.getAcceptList().contains(p.getName()))
+                .reward("Accept List", HardSoftScore.ONE_HARD, (s, l) -> s.getSalary());
+    }
+
     private Constraint rosterFormat(ConstraintFactory constraintFactory) {
         return constraintFactory.from(Player.class)
                 .filter(Player::getSelected)
@@ -39,6 +51,7 @@ public class LineupConstraintProvider implements ConstraintProvider {
                     switch(p) {
                         case "QB":
                         case "TE":
+                        case "DEF":
                             return c > 1;
                         case "RB":
                         case "WR":

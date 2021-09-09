@@ -9,7 +9,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Lineup {
-    private String day;
-    private int salaryCap;
+    private String day = "Sun";
+    private int salaryCap = 200;
+    private List<String> acceptList;
     private List<String> rejectList;
 }
