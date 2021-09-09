@@ -11,7 +11,7 @@ import org.optaplanner.core.api.score.stream.ConstraintProvider;
 public class LineupConstraintProvider implements ConstraintProvider {
 
     @Override
-    public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
+    public Constraint[] defineConstraints(final ConstraintFactory constraintFactory) {
         return new Constraint[] {
             salaryCap(constraintFactory),
             maxPoints(constraintFactory),
@@ -20,13 +20,13 @@ public class LineupConstraintProvider implements ConstraintProvider {
         };
     }
 
-    private Constraint maxPoints(ConstraintFactory constraintFactory) {
+    private Constraint maxPoints(final ConstraintFactory constraintFactory) {
         return constraintFactory.from(Player.class)
                 .filter(Player::getSelected)
                 .reward("Max FPPG", HardSoftScore.ONE_SOFT, p -> (int)p.getFppg());
     }
 
-    private Constraint salaryCap(ConstraintFactory constraintFactory) {
+    private Constraint salaryCap(final ConstraintFactory constraintFactory) {
         return constraintFactory.from(Player.class)
                 .filter(Player::getSelected)
                 .groupBy(ConstraintCollectors.sum(Player::getSalary))
@@ -35,7 +35,7 @@ public class LineupConstraintProvider implements ConstraintProvider {
                 .penalize("Salary Cap", HardSoftScore.ONE_HARD, (s, l) -> s - l.getSalaryCap());
     }
 
-    private Constraint acceptList(ConstraintFactory constraintFactory) {
+    private Constraint acceptList(final ConstraintFactory constraintFactory) {
         return constraintFactory.from(Player.class)
                 .filter(Player::getSelected)
                 .join(Lineup.class)
@@ -43,7 +43,7 @@ public class LineupConstraintProvider implements ConstraintProvider {
                 .reward("Accept List", HardSoftScore.ONE_HARD, (s, l) -> s.getSalary());
     }
 
-    private Constraint rosterFormat(ConstraintFactory constraintFactory) {
+    private Constraint rosterFormat(final ConstraintFactory constraintFactory) {
         return constraintFactory.from(Player.class)
                 .filter(Player::getSelected)
                 .groupBy(Player::getPosition, ConstraintCollectors.count())

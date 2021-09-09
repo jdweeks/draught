@@ -1,21 +1,21 @@
 package io.github.jdweeks.solver;
 
 import io.github.jdweeks.domain.LineupSolution;
+import lombok.RequiredArgsConstructor;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class LineupSolver {
 
-    @Inject
-    SolverManager<LineupSolution, UUID> solverManager;
+    final SolverManager<LineupSolution, UUID> solverManager;
 
-    public LineupSolution solve(LineupSolution problem) {
+    public LineupSolution solve(final LineupSolution problem) {
         SolverJob<LineupSolution, UUID> solverJob = solverManager.solve(UUID.randomUUID(), problem);
 
         LineupSolution solution;

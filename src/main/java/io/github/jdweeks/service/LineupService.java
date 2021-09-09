@@ -7,6 +7,7 @@ import io.github.jdweeks.domain.LineupSolution;
 import io.github.jdweeks.domain.Player;
 import io.github.jdweeks.kafka.LineupProducer;
 import io.github.jdweeks.solver.LineupSolver;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -15,13 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class LineupService {
 
-    @Inject
-    LineupProducer lineupProducer;
+    final LineupProducer lineupProducer;
 
-    @Inject
-    LineupSolver lineupSolver;
+    final LineupSolver lineupSolver;
 
     @Inject
     @RestClient

@@ -2,8 +2,8 @@ package io.github.jdweeks.web;
 
 import io.github.jdweeks.domain.Lineup;
 import io.github.jdweeks.service.LineupService;
+import lombok.RequiredArgsConstructor;
 
-import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Consumes;
@@ -15,13 +15,13 @@ import java.util.concurrent.CompletableFuture;
 @Path("/lineup")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@RequiredArgsConstructor
 public class LineupController {
 
-    @Inject
-    LineupService lineupService;
+    final LineupService lineupService;
 
     @POST
-    public Response optimizeLineup(Lineup lineup) {
+    public Response optimizeLineup(final Lineup lineup) {
         CompletableFuture.runAsync(() -> lineupService.optimizeLineup(lineup));
         return Response.accepted().build();
     }
