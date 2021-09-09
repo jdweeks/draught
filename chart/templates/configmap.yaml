@@ -5,4 +5,5 @@ metadata:
 data:
   application.properties: |-
     quarkus.optaplanner.solver.termination.spent-limit={{ .Values.app.optaplanner.limit }}
+    quarkus.mongodb.connection-string={{ .Values.app.mongodb.uri }}
     kafka.bootstrap.servers={{ .Values.app.kafka.bootstrap }}

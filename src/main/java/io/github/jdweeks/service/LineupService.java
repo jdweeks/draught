@@ -13,6 +13,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -39,9 +40,10 @@ public class LineupService {
 
         problem.setPlayers(players);
         LineupSolution solution = lineupSolver.solve(problem);
-
         LineupResponse response = buildResponse(solution);
-        sendResponse(response);
+
+        CompletableFuture.runAsync(() -> sendResponse(response));
+        CompletableFuture.runAsync(() -> saveResponse(response));
     }
 
     private LineupResponse buildResponse(LineupSolution solution) {
@@ -58,4 +60,6 @@ public class LineupService {
     private void sendResponse(LineupResponse response) {
         lineupProducer.produce(response);
     }
+
+    private void saveResponse(LineupResponse response) { response.persist(); };
 }

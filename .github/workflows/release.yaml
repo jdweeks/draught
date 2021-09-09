@@ -53,6 +53,7 @@ jobs:
           helm: helm3
           release: draught
           namespace: jdweeks
+          secrets: ${{ toJSON(secrets) }}
           chart: chart
         env:
           KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}

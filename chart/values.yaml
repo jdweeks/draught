@@ -24,6 +24,8 @@ service:
 app:
   kafka:
     bootstrap: kafka-0.kafka-headless.kafka-jdweeks.svc.cluster.local:9092
+  mongodb:
+    uri: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongo-mongodb.mongo-jdweeks.svc.cluster.local:27017
   optaplanner:
     limit: 60m
 
@@ -31,3 +33,7 @@ autoscaling:
   enabled: false
 
 resources: {}
+
+env: []
+
+secrets: []
