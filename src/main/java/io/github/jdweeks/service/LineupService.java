@@ -7,15 +7,12 @@ import io.github.jdweeks.domain.LineupSolution;
 import io.github.jdweeks.domain.Player;
 import io.github.jdweeks.kafka.LineupProducer;
 import io.github.jdweeks.solver.LineupSolver;
-import io.quarkus.mongodb.panache.reactive.ReactivePanacheMongoEntityBase;
-import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -31,6 +28,7 @@ public class LineupService {
     @RestClient
     YClient yClient;
 
+    // async
     public void optimizeLineup(Lineup lineup) {
         CompletableFuture.runAsync(() -> {
             LineupSolution problem = new LineupSolution();
@@ -44,28 +42,26 @@ public class LineupService {
 
             problem.setPlayers(players);
 
-            lineupSolver.solve(problem)
-                    .chain(this::buildResponse)
-                    .chain(r -> Uni.combine().all().unis(saveResponse(r), sendResponse(r)).asTuple().replaceWithVoid());
+            LineupSolution solution = lineupSolver.solve(problem).await().indefinitely();
+            LineupResponse response = buildResponse(solution);
+
+            sendResponse(response);
+            saveResponse(response);
         });
     }
 
-    private Uni<LineupResponse> buildResponse(LineupSolution solution) {
-        return Uni.createFrom().optional(() -> {
-            LineupResponse response = new LineupResponse();
+    private LineupResponse buildResponse(LineupSolution solution) {
+        LineupResponse response = new LineupResponse();
 
-            response.setPlayers(solution.getPlayers().stream().filter(Player::getSelected).collect(Collectors.toList()));
-            response.setNumPlayers(response.getPlayers().size());
-            response.setTotalPoints(response.getPlayers().stream().mapToDouble(Player::getFppg).sum());
-            response.setTotalSalary(response.getPlayers().stream().mapToInt(Player::getSalary).sum());
+        response.setPlayers(solution.getPlayers().stream().filter(Player::getSelected).collect(Collectors.toList()));
+        response.setNumPlayers(response.getPlayers().size());
+        response.setTotalPoints(response.getPlayers().stream().mapToDouble(Player::getFppg).sum());
+        response.setTotalSalary(response.getPlayers().stream().mapToInt(Player::getSalary).sum());
 
-            return Optional.of(response);
-        });
+        return response;
     }
 
-    private Uni<Void> sendResponse(LineupResponse response) {
-        return Uni.createFrom().completionStage(lineupProducer.produce(response));
-    }
+    private void sendResponse(LineupResponse response) { lineupProducer.produce(response); }
 
-    private Uni<LineupResponse> saveResponse(LineupResponse response) { return response.persist(); }
+    private void saveResponse(LineupResponse response) { response.persist(); }
 }
