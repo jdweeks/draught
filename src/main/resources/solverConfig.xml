@@ -10,5 +10,6 @@
             </pillarSwapMoveSelector>
         </unionMoveSelector>
     </localSearch>
+    <moveThreadCount>AUTO</moveThreadCount>
     <environmentMode>NON_REPRODUCIBLE</environmentMode>
 </solver>

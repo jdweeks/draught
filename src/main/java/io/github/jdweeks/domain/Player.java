@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
+import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 @Getter
@@ -22,4 +23,7 @@ public class Player {
 
     @PlanningVariable(valueRangeProviderRefs = "selected")
     private Boolean selected;
+
+    @PlanningId
+    protected Integer planningId = this.hashCode();
 }
