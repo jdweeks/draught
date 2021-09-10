@@ -3,7 +3,6 @@ package io.github.jdweeks.web;
 import io.github.jdweeks.domain.Lineup;
 import io.github.jdweeks.domain.LineupResponse;
 import io.github.jdweeks.service.LineupService;
-import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 
 import javax.ws.rs.Consumes;
@@ -26,13 +25,13 @@ public class LineupController {
     private final static String QUERY_LATEST = "{ sort: { _id: -1 }, limit: 1 }";
 
     @GET
-    public Uni<List<LineupResponse>> getLineups() {
+    public List<LineupResponse> getLineups() {
         return LineupResponse.listAll();
     }
 
     @GET
     @Path("/latest")
-    public Uni<List<LineupResponse>> getLatest() {
+    public List<LineupResponse> getLatest() {
         return LineupResponse.list(QUERY_LATEST);
     }
 
