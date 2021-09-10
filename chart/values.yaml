@@ -27,13 +27,9 @@ app:
   mongodb:
     uri: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongo-mongodb.mongo-jdweeks.svc.cluster.local:27017
   optaplanner:
-    limit: 60m
+    limit: 5m
 
 autoscaling:
   enabled: false
 
 resources: {}
-
-env: []
-
-secrets: []
