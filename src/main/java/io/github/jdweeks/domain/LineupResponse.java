@@ -4,6 +4,7 @@ import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class LineupResponse extends PanacheMongoEntity {
+    private ObjectId id;
     private int numPlayers;
     private int totalSalary;
     private double totalPoints;

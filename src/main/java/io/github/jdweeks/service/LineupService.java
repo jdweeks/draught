@@ -36,10 +36,11 @@ public class LineupService {
 
             List<Player> players = yClient.getPlayers().getPlayers().getResult();
             players = players.stream()
+                    .filter(p -> p.getFppg() > 0)
                     .filter(p -> p.getGameStartTime().startsWith(lineup.getDay()))
+                    .filter(p -> filterExcludedTimes(lineup, p))
                     .filter(p -> !lineup.getRejectList().contains(p.getName()))
                     .collect(Collectors.toList());
-
             problem.setPlayers(players);
 
             LineupSolution solution = lineupSolver.solve(problem).await().indefinitely();
@@ -48,6 +49,13 @@ public class LineupService {
             sendResponse(response);
             saveResponse(response);
         });
+    }
+
+    private boolean filterExcludedTimes(Lineup l, Player p) {
+        for (String t : l.getExcludeTimes()) {
+            if (p.getGameStartTime().contains(t)) return false;
+        }
+        return true;
     }
 
     private LineupResponse buildResponse(LineupSolution solution) {
